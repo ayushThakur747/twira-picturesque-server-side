@@ -4,10 +4,37 @@ import mongoose from 'mongoose';
 
 export const getPosts = async(req,res)=>{
     try {
+        
         const postMessages =await PostMessage.find();//getting all the data from db
-        console.log("post messg:",postMessages);
+        //console.log("post messg:",postMessages);
 
         res.status(200).json(postMessages);
+    } catch (error) {
+        res.status(404).json({message: error.message});
+        console.log(error);
+    }
+}
+export const getTrendingPosts = async (req,res)=>{
+    console.log("trending");
+    try {
+        //sorting the posts according to number of likes
+        const trendingPost = await PostMessage.aggregate([{                                                     
+                                                    $project:{
+                                                        _id:"$id",
+                                                        numberOfLikes:{$size:"$likeCount"},
+                                                        likeCount:"$likeCount",
+                                                        title:"$title",                                                   
+                                                        message:"$message",
+                                                        name: "$name",
+                                                        creator:"$creator",
+                                                        tags:"$tags",
+                                                        selectedFile: "$selectedFile",
+                                                        
+                                                    }
+                                                }]).sort({"numberOfLikes":-1});
+                                                       
+        console.log("trending post:" ,trendingPost);
+        res.status(200).json(trendingPost);
     } catch (error) {
         res.status(404).json({message: error.message});
         console.log(error);

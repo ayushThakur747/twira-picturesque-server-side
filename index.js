@@ -21,9 +21,9 @@ import userRoutes from './routes/users.js'
 app.use('/user',userRoutes);//user route
 
 
-//connecting to database(mongodb cloud atlas version)
-const PORT = process.env.PORT || 5000;
 
+const PORT = 5000;
+//connecting to database(mongodb cloud atlas version)
 mongoose.connect(process.env.CONNECTION_URL, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -31,7 +31,7 @@ mongoose.connect(process.env.CONNECTION_URL, {
 	useFindAndModify: false
 })
 .then(()=>app.listen(PORT,() => console.log(`server running on port: ${PORT}`)) )
-.catch((err) => console.log(err));
+.catch((err) => console.log("server error:",err));
 
 //listening to server\
 //app.listen(PORT);
